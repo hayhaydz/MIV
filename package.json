@@ -1,0 +1,23 @@
+{
+  "name": "miv",
+  "version": "1.0.0",
+  "description": "Minimal Image Viewer",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hayhaydz/MIV.git"
+  },
+  "author": "Haydon",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/hayhaydz/MIV/issues"
+  },
+  "homepage": "https://github.com/hayhaydz/MIV#readme",
+  "devDependencies": {
+    "electron": "^13.1.1"
+  }
+}

@@ -8,8 +8,8 @@ const createWindow = () => {
         width: width,
         height: height,
         resizable: false,
-        // frame: false,
-        // transparent: true,
+        frame: false,
+        transparent: true,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -17,7 +17,7 @@ const createWindow = () => {
     });
 
     win.loadFile('index.html');
-    win.removeMenu();
+    // win.removeMenu();
     // win.webContents.openDevTools();
 };
 
@@ -36,5 +36,18 @@ app.on('window-all-closed', () => {
 ipcMain.on('resize-window', (event, arg) => {
     let size = arg;
     win.setSize(size[0], size[1]);
+    // win.setPosition(50, 50);
     event.reply('resize-window-response', 'resize complete');
 });
+
+ipcMain.on('close', () => {
+    win.close();
+});
+
+// ipcMain.on('fullscreen', () => {
+//     win.setFullScreen(true);
+// });
+
+// ipcMain.on('disableFullscreen', () => {
+//     win.setFullScreen(false);
+// });

@@ -19,5 +19,8 @@
   "homepage": "https://github.com/hayhaydz/MIV#readme",
   "devDependencies": {
     "electron": "^13.1.1"
+  },
+  "dependencies": {
+    "panzoom": "^9.4.2"
   }
 }

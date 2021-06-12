@@ -5,8 +5,8 @@ const createWindow = () => {
     const { width, height } = screen.getPrimaryDisplay().workAreaSize;
 
     win = new BrowserWindow({
-        width: width,
-        height: height,
+        width: 800,
+        height: 750,
         resizable: false,
         frame: false,
         transparent: true,
@@ -22,7 +22,9 @@ const createWindow = () => {
 };
 
 app.whenReady().then(() => {
-    createWindow();
+    setTimeout(function() {
+        createWindow();
+    }, 10);
 
     app.on('activate', () => {
         if(BrowserWindow.getAllWindows().length === 0) createWindow();
@@ -44,10 +46,14 @@ ipcMain.on('close', () => {
     win.close();
 });
 
-// ipcMain.on('fullscreen', () => {
-//     win.setFullScreen(true);
-// });
+ipcMain.on('fullscreen', () => {
+    win.setFullScreen(true);
+});
 
-// ipcMain.on('disableFullscreen', () => {
-//     win.setFullScreen(false);
-// });
+ipcMain.on('disableFullscreen', () => {
+    win.setFullScreen(false);
+});
+
+ipcMain.on('console-log', (event, arg) => {
+    console.log(arg);
+});

@@ -8,12 +8,12 @@ let imgData;
 let img = document.getElementById('img');
 let isFullscreen = false;
 let zoomedIn = false;
-let zoomInstance = panzoom(img, 
-    {minZoom: 1,
+let zoomInstance = panzoom(img, {
+    minZoom: 1,
     maxZoom: 6,
     bounds: true,
-    boundsPadding: 1}
-);
+    boundsPadding: 1 
+});
 
 /**
  * Conserve aspect ratio of the original region. Useful when shrinking/enlarging
@@ -35,8 +35,6 @@ const calculateAspectRatioFit = (srcWidth, srcHeight, maxWidth, maxHeight) => {
 }
 
 const calculateImgSize = () => {
-    console.log('hi');
-    console.log(maxScreenSize);
     originalImageSize = [img.width, img.height];
     imgData = calculateAspectRatioFit(originalImageSize[0], originalImageSize[1], maxScreenSize[0], maxScreenSize[1]);
     newImageSize = [imgData.width, imgData.height];
@@ -50,9 +48,9 @@ const keyDown = (e) => {
     }
 
     if(e.key === "z") {
-        // MAKESURE TO CHECK WHAT CURRENT ZOOM LEVEL IS FIRST
+        let currentZoomScale = zoomInstance.getTransform().scale;
         if(originalImageSize[0] > maxScreenSize[0] || originalImageSize[1] > maxScreenSize[1]) {
-            if(!zoomedIn) {
+            if(!zoomedIn && currentZoomScale <= 1) {
                 zoomInstance.smoothZoom(newImageSize[0] / 2, newImageSize[1] / 2, 2);
                 zoomedIn = true;
             } else {

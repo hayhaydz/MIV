@@ -1,11 +1,12 @@
 * {
     margin: 0px;
     padding: 0px;
+    border-radius: 20px;
 }
 
 body, html {
     height: 100%;
-    background-color: #0c0c0c;
+    background-color: transparent;
 }
 
 .menubar {
@@ -20,4 +21,16 @@ body, html {
 
 img {
     user-select: none;
+}
+
+.container {
+    width: 100%;
+    height: 100%;
+    border-radius: 3px;
+    background-color: #e7e7e7;
+}
+
+.content {
+    width: 100%;
+    height: 100%;
 }

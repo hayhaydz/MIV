@@ -35,7 +35,7 @@ const calculateAspectRatioFit = (srcWidth, srcHeight, maxWidth, maxHeight) => {
 }
 
 const calculateImgSize = () => {
-    originalImageSize = [img.width, img.height];
+    // ipcRenderer.send('console-log', maxScreenSize);
     imgData = calculateAspectRatioFit(originalImageSize[0], originalImageSize[1], maxScreenSize[0], maxScreenSize[1]);
     newImageSize = [imgData.width, imgData.height];
     img.width = newImageSize[0];
@@ -60,28 +60,34 @@ const keyDown = (e) => {
         }
     }
 
-    // if(e.key === "f") {
-    //     if(!isFullscreen) {
-    //         ipcRenderer.send('fullscreen');
-    //         maxScreenSize = [maxScreenSize[0] + 100, maxScreenSize[1] + 100];
-    //         calculateImgSize();
-    //         zoomInstance.moveTo(maxScreenSize[0] / 2, maxScreenSize[1] / 2);
-    //         isFullscreen = true;
-    //     } else {
-    //         ipcRenderer.send('disableFullscreen');
-    //         maxScreenSize = [maxScreenSize[0] - 100, maxScreenSize[1] - 100];
-    //         calculateImgSize();
-    //         zoomInstance.moveTo(0, 0);
-    //         isFullscreen = false;
-    //     }
+    if(e.key === "f") {
+        if(!isFullscreen) {
+            ipcRenderer.send('fullscreen');
+            ipcRenderer.on('fullscreen-response', () => {
+                maxScreenSize = [window.innerWidth, window.innerHeight];
+                ipcRenderer.send('console-log', maxScreenSize);
+                calculateImgSize();
+                // zoomInstance.moveTo(maxScreenSize[0] / 2, maxScreenSize[1] / 2);
+                isFullscreen = true;
+            });
+        } else {
+            maxScreenSize = [window.innerWidth - 100, window.innerHeight - 100];
+            ipcRenderer.send('disableFullscreen');
+            ipcRenderer.on('disableFullscreen-response', () => {
+                calculateImgSize();
+                // zoomInstance.moveTo(0, 0);
+                isFullscreen = false;
+            });
+        }
 
-    //     zoomInstance.zoomAbs(0, 0, 1);
-    // }
+        // zoomInstance.zoomAbs(0, 0, 1);
+    }
 }
 
 window.addEventListener('DOMContentLoaded', () => {
     img.onload = () => {
         img.setAttribute('draggable', false);
+        originalImageSize = [img.width, img.height];
         maxScreenSize = [window.innerWidth - 100, window.innerHeight - 100];
         calculateImgSize();
         ipcRenderer.send('resize-window', newImageSize);

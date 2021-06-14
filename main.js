@@ -1,16 +1,20 @@
 const { app, BrowserWindow, screen, ipcMain } = require("electron");
 
 let win = null;
+let maxSize = { width: 0, height: 0 };
+
 const createWindow = () => {
-    const { width, height } = screen.getPrimaryDisplay().workAreaSize;
+    maxSize = screen.getPrimaryDisplay().workAreaSize;
 
     win = new BrowserWindow({
-        // width: 700,
-        // height: 550,
+        width: 100,
+        height: 100,
         resizable: false,
         frame: false,
         transparent: true,
         fullscreen: true,
+        maxWidth: maxSize.width,
+        maxHeight: maxSize.height,
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
@@ -32,20 +36,14 @@ app.whenReady().then(() => {
     });
 });
 
-app.on('window-all-closed', () => {
-    if(process.platform !== 'darwin') app.quit();
-});
-
 ipcMain.on('resize-window', (event, arg) => {
     win.setFullScreen(false);
     let size = arg;
-    console.log(size);
-    // win.setSize(size[0], size[1]);
-    win.setSize(500, 700);
-    console.log(win.getSize());
+    win.setResizable(true);
+    win.setSize(size[0], size[1]);
+    win.setResizable(false);
+    win.setPosition(50, 50);
     event.reply('resize-window-response', 'resize complete');
-    // win.setPosition(50, 50);
-    
 });
 
 ipcMain.on('close', () => {
@@ -64,4 +62,8 @@ ipcMain.on('disableFullscreen', (event) => {
 
 ipcMain.on('console-log', (event, arg) => {
     console.log(arg);
+});
+
+app.on('window-all-closed', () => {
+    if(process.platform !== 'darwin') app.quit();
 });

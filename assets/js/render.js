@@ -8,12 +8,50 @@ let imgData;
 let img = document.getElementById('img');
 let isFullscreen = false;
 let zoomedIn = false;
+let isHighRes = false;
 let zoomInstance = panzoom(img, {
     minZoom: 1,
     maxZoom: 6,
     bounds: true,
     boundsPadding: 1 
 });
+
+const resetPanzoom = () => {
+    zoomInstance.dispose();
+    if(isFullscreen) {
+        if(isHighRes) {
+            zoomInstance = panzoom(img, {
+                minZoom: 1,
+                maxZoom: 6,
+                bounds: true,
+            });
+        } else {
+            zoomInstance = panzoom(img, {
+                minZoom: 1,
+                maxZoom: 1,
+                bounds: true,
+            });
+        }
+        zoomInstance.moveTo(maxScreenSize[0] / 2 - newImageSize[0] / 2, maxScreenSize[1] / 2 - newImageSize[1] / 2);
+        zoomInstance.zoomAbs(0, 0, 1);
+    } else {
+        if(isHighRes) {
+            zoomInstance = panzoom(img, {
+                minZoom: 1,
+                maxZoom: 6,
+                bounds: true,
+                boundsPadding: 1
+            });
+        } else {
+            zoomInstance = panzoom(img, {
+                minZoom: 1,
+                maxZoom: 1,
+                bounds: true,
+                boundsPadding: 1
+            });
+        }
+    }
+}
 
 /**
  * Conserve aspect ratio of the original region. Useful when shrinking/enlarging
@@ -35,7 +73,6 @@ const calculateAspectRatioFit = (srcWidth, srcHeight, maxWidth, maxHeight) => {
 }
 
 const calculateImgSize = () => {
-    // ipcRenderer.send('console-log', maxScreenSize);
     imgData = calculateAspectRatioFit(originalImageSize[0], originalImageSize[1], maxScreenSize[0], maxScreenSize[1]);
     newImageSize = [imgData.width, imgData.height];
     img.width = newImageSize[0];
@@ -48,13 +85,21 @@ const keyDown = (e) => {
     }
 
     if(e.key === "z") {
-        let currentZoomScale = zoomInstance.getTransform().scale;
-        if(originalImageSize[0] > maxScreenSize[0] || originalImageSize[1] > maxScreenSize[1]) {
+        if(isHighRes) {
+            let currentZoomScale = zoomInstance.getTransform().scale;
             if(!zoomedIn && currentZoomScale <= 1) {
-                zoomInstance.smoothZoom(newImageSize[0] / 2, newImageSize[1] / 2, 2);
+                if(isFullscreen) {
+                    zoomInstance.smoothZoom(maxScreenSize[0] / 2, maxScreenSize[1] / 2, 2);
+                } else {
+                    zoomInstance.smoothZoom(newImageSize[0] / 2, newImageSize[1] / 2, 2);
+                }
                 zoomedIn = true;
             } else {
-                zoomInstance.smoothZoom(newImageSize[0] / 2, newImageSize[1] / 2, 0);
+                if(isFullscreen) {
+                    zoomInstance.smoothZoom(maxScreenSize[0] / 2, maxScreenSize[1] / 2, 0);
+                } else {
+                    zoomInstance.smoothZoom(newImageSize[0] / 2, newImageSize[1] / 2, 0);
+                }
                 zoomedIn = false;
             }
         }
@@ -65,22 +110,29 @@ const keyDown = (e) => {
             ipcRenderer.send('fullscreen');
             ipcRenderer.on('fullscreen-response', () => {
                 maxScreenSize = [window.innerWidth, window.innerHeight];
-                ipcRenderer.send('console-log', maxScreenSize);
                 calculateImgSize();
-                // zoomInstance.moveTo(maxScreenSize[0] / 2, maxScreenSize[1] / 2);
+                img.style.borderRadius = "0px";
                 isFullscreen = true;
+                resetPanzoom();
             });
         } else {
             maxScreenSize = [window.innerWidth - 100, window.innerHeight - 100];
             ipcRenderer.send('disableFullscreen');
             ipcRenderer.on('disableFullscreen-response', () => {
                 calculateImgSize();
-                // zoomInstance.moveTo(0, 0);
                 isFullscreen = false;
+                resetPanzoom();
             });
         }
+    }
 
-        // zoomInstance.zoomAbs(0, 0, 1);
+    if(e.key === "c") {
+        if(isHighRes) {
+            let currentZoomScale = zoomInstance.getTransform().scale;
+            if(isFullscreen && !zoomedIn && currentZoomScale <= 1) {
+                zoomInstance.smoothMoveTo(maxScreenSize[0] / 2 - newImageSize[0] / 2, maxScreenSize[1] / 2 - newImageSize[1] / 2);
+            }
+        }
     }
 }
 
@@ -94,6 +146,11 @@ window.addEventListener('DOMContentLoaded', () => {
         ipcRenderer.on('resize-window-response', () => {
             document.body.style.overflow = "hidden";
             document.body.height = "100vh";
+            if(originalImageSize[0] < maxScreenSize[0] || originalImageSize[1] < maxScreenSize[1]) {
+                zoomInstance.dispose();
+            } else {
+                isHighRes = true;
+            }
         });
     }
 

@@ -1,7 +1,9 @@
-const { app, BrowserWindow, screen, ipcMain } = require("electron");
+const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
+const fs = require("fs");
 
 let win = null;
 let maxSize = { width: 0, height: 0 };
+let ready = false;
 
 const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
@@ -22,6 +24,7 @@ const createWindow = () => {
     });
 
     win.loadFile('index.html');
+    win.focus();
     // win.removeMenu();
     // win.webContents.openDevTools();
 };
@@ -34,36 +37,75 @@ app.whenReady().then(() => {
     app.on('activate', () => {
         if(BrowserWindow.getAllWindows().length === 0) createWindow();
     });
-});
 
-ipcMain.on('resize-window', (event, arg) => {
-    win.setFullScreen(false);
-    let size = arg;
-    win.setResizable(true);
-    win.setSize(size[0], size[1]);
-    win.setResizable(false);
-    win.setPosition(50, 50);
-    event.reply('resize-window-response', 'resize complete');
-});
-
-ipcMain.on('close', () => {
-    win.close();
-});
-
-ipcMain.on('fullscreen', (event) => {
-    win.setFullScreen(true);
-    event.reply('fullscreen-response', 'fullscreen complete');
-});
-
-ipcMain.on('disableFullscreen', (event) => {
-    win.setFullScreen(false);
-    event.reply('disableFullscreen-response', 'disable fullscreen complete');
-});
-
-ipcMain.on('console-log', (event, arg) => {
-    console.log(arg);
+    ready = true;
 });
 
 app.on('window-all-closed', () => {
     if(process.platform !== 'darwin') app.quit();
 });
+
+ipcMain.on('resize-window', (event, arg) => {
+    if(ready) {
+        win.setFullScreen(false);
+        let size = arg;
+        win.setResizable(true);
+        win.setSize(size[0], size[1]);
+        win.setResizable(false);
+        win.setPosition(50, 50);
+        event.reply('resize-window-response', 'resize complete');
+    }
+});
+
+ipcMain.on('close', () => {
+    if(ready) {
+        win.close();
+    }
+});
+
+ipcMain.on('fullscreen', (event) => {
+    if(ready) {
+        win.setFullScreen(true);
+        event.reply('fullscreen-response', 'fullscreen complete');
+    }
+});
+
+ipcMain.on('disableFullscreen', (event) => {
+    if(ready) {
+        win.setFullScreen(false);
+        event.reply('disableFullscreen-response', 'disable fullscreen complete');
+    }
+});
+
+ipcMain.on('console-log', (event, arg) => {
+    if(ready) {
+        console.log(arg);
+    }
+});
+
+ipcMain.on("chooseFile", (event, arg) => {
+    if(ready) {
+        const result = dialog.showOpenDialog({
+            properties: ["openFile"],
+            filters: [{ name: "Images", extensions: ["png","jpg","jpeg"] }]
+        });
+    
+        result.then(({canceled, filePaths, bookmarks}) => {
+            const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+            event.reply("chosenFile", base64);
+        });
+    }
+});
+
+// read the file and send data to the render process
+ipcMain.on('getFileData', (event) => {
+    if(ready) {
+        let data = null;
+        if (process.platform == 'win32' && process.argv.length >= 2) {
+            let openFilePath = process.argv[1];
+            data = openFilePath;
+        }
+    
+        event.reply('getFileData-response', data);
+    }
+})

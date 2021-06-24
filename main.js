@@ -26,7 +26,7 @@ const createWindow = () => {
     win.loadFile('index.html');
     win.focus();
     // win.removeMenu();
-    win.webContents.openDevTools();
+    // win.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
@@ -83,7 +83,7 @@ ipcMain.on('console-log', (event, arg) => {
     }
 });
 
-ipcMain.on("chooseFile", (event, arg) => {
+ipcMain.on('chooseFile', (event, arg) => {
     if(ready) {
         const result = dialog.showOpenDialog({
             properties: ["openFile"],
@@ -91,24 +91,23 @@ ipcMain.on("chooseFile", (event, arg) => {
         });
     
         result.then(({canceled, filePaths, bookmarks}) => {
-            console.log(filePaths);
             if(filePaths !== undefined) {
                 const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+                event.reply("chosenFile", base64);
             }
-            event.reply("chosenFile", base64);
         });
     }
 });
 
-// read the file and send data to the render process
 ipcMain.on('getFileData', (event) => {
     if(ready) {
         let data = null;
         if (process.platform == 'win32' && process.argv.length >= 2) {
             let openFilePath = process.argv[1];
             data = openFilePath;
+
+            const base64 = fs.readFileSync(data).toString('base64');
+            event.reply('getFileData-response', base64);
         }
-    
-        event.reply('getFileData-response', data);
     }
-})
+});

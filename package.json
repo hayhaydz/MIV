@@ -12,7 +12,11 @@
   },
   "build": {
     "fileAssociations": {
-      "ext": ["png", "jpg", "jpeg"],
+      "ext": [
+        "png",
+        "jpg",
+        "jpeg"
+      ],
       "role": "viewer"
     }
   },
@@ -27,7 +31,8 @@
   },
   "homepage": "https://github.com/hayhaydz/MIV#readme",
   "devDependencies": {
-    "electron": "^13.1.1"
+    "electron": "^13.1.1",
+    "electron-builder": "^22.11.7"
   },
   "dependencies": {
     "panzoom": "^9.4.2"

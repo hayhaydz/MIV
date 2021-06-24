@@ -26,7 +26,7 @@ const createWindow = () => {
     win.loadFile('index.html');
     win.focus();
     // win.removeMenu();
-    // win.webContents.openDevTools();
+    win.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
@@ -91,7 +91,10 @@ ipcMain.on("chooseFile", (event, arg) => {
         });
     
         result.then(({canceled, filePaths, bookmarks}) => {
-            const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+            console.log(filePaths);
+            if(filePaths !== undefined) {
+                const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+            }
             event.reply("chosenFile", base64);
         });
     }

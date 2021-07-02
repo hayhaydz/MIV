@@ -1,6 +1,9 @@
+@import "fonts.scss";
+
 * {
     margin: 0px;
     padding: 0px;
+    font-family: Roboto, sans-serif;
 }
 
 body, html {
@@ -52,4 +55,73 @@ img {
     z-index: 1;
     user-select: none;
     width: 100%;
+}
+
+.modal {
+    position: absolute;
+    z-index: 5;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background-color: #f0f0f0;
+    border-radius: 10px;
+    padding: 1em;
+}
+
+.logo {
+    width: 40px;
+    margin-bottom: 32px;
+}
+
+.label {
+    display: block;
+    font-weight: lighter;
+    color: #6d6c6c;
+    margin-bottom: 4px;
+}
+
+.version {
+    font-weight: bold;
+    color: #242424;
+}
+
+.heading {
+    font-size: 24px;
+    color: #1a1a1a;
+    margin-bottom: 8px;
+}
+
+.text {
+    font-size: 14px;
+    color: #2b2b2b;
+    line-height: 1.6em;
+    margin-bottom: 24px;
+}
+
+.copyright {
+    position: absolute;
+    bottom: 0px;
+    left: 0px;
+    padding: 1em;
+    font-size: 12px;
+    color: #616161;
+}
+
+.table {
+    text-align: left;
+    padding: 1em;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #999;
+    padding: 0.5rem;
+    text-align: left;
+}
+
+.about {
+    display: none;
 }

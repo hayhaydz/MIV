@@ -11,6 +11,8 @@ const createWindow = () => {
     win = new BrowserWindow({
         width: 100,
         height: 100,
+        minHeight: 100,
+        minWidth: 100,
         resizable: false,
         frame: false,
         transparent: true,
@@ -106,8 +108,10 @@ ipcMain.on('getFileData', (event) => {
             let openFilePath = process.argv[1];
             data = openFilePath;
 
-            const base64 = fs.readFileSync(data).toString('base64');
-            event.reply('getFileData-response', base64);
+            if(data !== ".") {
+                const base64 = fs.readFileSync(data).toString('base64');
+                event.reply('getFileData-response', base64);
+            }
         }
     }
 });

@@ -11,6 +11,8 @@ let isFullscreen = false;
 let zoomedIn = false;
 let isHighRes = false;
 let noImg = false;
+let smallImg = false;
+let modalOpen = false;
 
 let mousePosition = {
     x: -1,
@@ -43,8 +45,28 @@ const resetPanzoom = () => {
         if(!isHighRes) {
             zoomSettingsBP.maxZoom = 1;
         }
-        zoomInstance = panzoom(img, zoomSettingsBP);
+        if(!smallImg) {
+            zoomInstance = panzoom(img, zoomSettingsBP);
+        } else {
+            zoomInstance = panzoom(img, zoomSettings);
+            zoomInstance.moveTo(400 / 2 - newImageSize[0] / 2, 500 / 2 - newImageSize[1] / 2);
+            zoomInstance.zoomAbs(0, 0, 1);
+        }
     }
+}
+
+const openModal = (id) => {
+    zoomInstance.dispose();
+    let modal = document.getElementById(`${id}`);
+    modal.style.display = "block";
+    modalOpen = true;
+}
+
+const closeModal = (id) => {
+    resetPanzoom();
+    let modal = document.getElementById(`${id}`);
+    modal.style.display = "none";
+    modalOpen = false;
 }
 
 document.onmousemove = (event) => {
@@ -79,6 +101,7 @@ const calculateImgSize = () => {
 }
 
 const initialSetup = () => {
+    // zoomInstance = panzoom(img, zoomSettingsBP);
     img.setAttribute('draggable', false);
     img.style.width = "auto";
     originalImageSize = [img.width, img.height];
@@ -89,21 +112,52 @@ const initialSetup = () => {
         isHighRes = true;
     }
     calculateImgSize();
-    ipcRenderer.send('resize-window', newImageSize);
+    if(newImageSize[0] < 400 || newImageSize[1] < 500) {
+        ipcRenderer.send('resize-window', [400, 500]);
+        smallImg = true;
+    } else {
+        ipcRenderer.send('resize-window', newImageSize);
+        smallImg = false;
+    }
     ipcRenderer.on('resize-window-response', () => {
         document.body.style.overflow = "hidden";
         document.body.height = "100vh";
         resetPanzoom();
-        img.style.width = "100%";
+        if(smallImg) {
+            img.classList.add("smallImg");
+        } else {
+            img.style.width = "100%";
+            img.classList.remove("smallImg");
+        }
     });
 }
 
 const keyDown = (e) => {
-    if(e.ctrlKey && e.key === "x") {
-        ipcRenderer.send('close');
+    if(e.ctrlKey && e.key.toLowerCase() === "h") {
+        if(!modalOpen) {
+            openModal("help");
+        } else {
+            closeModal("help");
+        }
     }
 
-    if(e.ctrlKey && e.key === "o") {
+    if(e.ctrlKey && e.key.toLowerCase() === "j") {
+        if(!modalOpen) {
+            openModal("about");
+        } else {
+            closeModal("about");
+        }
+    }
+
+    if(e.ctrlKey && e.key.toLowerCase() === "k") {
+        if(!modalOpen) {
+            openModal("info");
+        } else {
+            closeModal("info");
+        }
+    }
+
+    if(e.ctrlKey && e.key.toLowerCase() === "o") {
         if(!isFullscreen) {
             ipcRenderer.send('chooseFile');
             ipcRenderer.on('chosenFile', (event, base64) => {
@@ -112,18 +166,22 @@ const keyDown = (e) => {
                 img.onload = () => {
                     img.width = img.naturalWidth;
                     img.height = img.naturalHeight;
-                    document.getElementById('backupText').style.display = "none";
+                    initialSetup();
                     if(noImg) {
                         img.style.opacity = "1";
+                        document.getElementById('backupText').style.display = "none";
                         noImg = false;
-                        initialSetup();
                     }
                 }
             });
         }
     }
 
-    if(e.key === "z") {
+    if(e.ctrlKey && e.key.toLowerCase() === "x") {
+        ipcRenderer.send('close');
+    }
+
+    if(e.key.toLowerCase() === "z") {
         if(isHighRes && !noImg) {
             let currentZoomScale = zoomInstance.getTransform().scale;
             if(!zoomedIn && currentZoomScale <= 1) {
@@ -140,7 +198,7 @@ const keyDown = (e) => {
         }
     }
 
-    if(e.key === "f") {
+    if(e.key.toLowerCase() === "f") {
         if(!noImg) {
             if(!isFullscreen) {
                 ipcRenderer.send('fullscreen');
@@ -168,11 +226,13 @@ const keyDown = (e) => {
         }
     }
 
-    if(e.key === "c") {
-        if(isHighRes && !noImg) {
+    if(e.key.toLowerCase() === "c") {
+        if(isHighRes && !noImg || smallImg) {
             let currentZoomScale = zoomInstance.getTransform().scale;
             if(isFullscreen && !zoomedIn && currentZoomScale <= 1) {
                 zoomInstance.smoothMoveTo(maxScreenSize[0] / 2 - newImageSize[0] / 2, maxScreenSize[1] / 2 - newImageSize[1] / 2);
+            } else if (smallImg) {
+                zoomInstance.smoothMoveTo(400 / 2 - newImageSize[0] / 2, 500 / 2 - newImageSize[1] / 2);
             }
         }
     }

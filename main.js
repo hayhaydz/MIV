@@ -9,10 +9,10 @@ const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
 
     win = new BrowserWindow({
-        width: 100,
-        height: 100,
-        minHeight: 100,
-        minWidth: 100,
+        width: 400,
+        height: 500,
+        minHeight: 400,
+        minWidth: 500,
         resizable: false,
         frame: false,
         transparent: true,

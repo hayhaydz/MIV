@@ -1,9 +1,13 @@
 const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
+const { ipcRenderer } = require("electron/renderer");
 const fs = require("fs");
 
-let win = null;
+let win;
+let childWin;
 let maxSize = { width: 0, height: 0 };
 let ready = false;
+let modalOpen = false;
+let currentModal = "";
 
 const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
@@ -22,13 +26,30 @@ const createWindow = () => {
         webPreferences: {
             nodeIntegration: true,
             contextIsolation: false,
+            nativeWindowOpen: true,
         }
     });
 
     win.loadFile('index.html');
     win.focus();
-    // win.removeMenu();
+
+    childWin = new BrowserWindow({
+        parent: win,
+        width: 360,
+        height: 460,
+        resizable: false,
+        frame: false,
+        transparent: true,
+        webPreferences: {
+            nodeIntegration: true,
+            contextIsolation: false,
+        }
+    });
+    childWin.loadFile('child.html');
+    childWin.hide();
+    
     // win.webContents.openDevTools();
+    // childWin.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
@@ -113,5 +134,28 @@ ipcMain.on('getFileData', (event) => {
                 event.reply('getFileData-response', base64);
             }
         }
+    }
+});
+
+ipcMain.on('toggleModal', (e, arg) => {
+    if(arg !== currentModal) {
+        currentModal = arg;
+        let mainWinPos = win.getPosition();
+        childWin.show();
+        let centerPadding = {
+            x: win.getSize()[0] / 2 - 360 / 2,
+            y: win.getSize()[1] / 2 - 460 / 2,
+        };
+        childWin.setPosition(mainWinPos[0] + centerPadding.x, mainWinPos[1] + centerPadding.y);
+        win.webContents.send('toggleModal', [arg, modalOpen]);
+        childWin.webContents.send('toggleModal', [arg, modalOpen]);
+        modalOpen = true;
+    } else {
+        currentModal = "";
+        childWin.hide();
+        win.focus();
+        win.webContents.send('toggleModal', [arg, modalOpen]);
+        childWin.webContents.send('toggleModal', [arg, modalOpen]);
+        modalOpen = false;
     }
 });

@@ -1,167 +1,163 @@
 @import "fonts.scss";
 
 * {
-    margin: 0px;
-    padding: 0px;
-    font-family: Roboto, sans-serif;
+  margin: 0px;
+  padding: 0px;
+  font-family: Roboto, sans-serif;
 }
 
-body, html {
-    height: 100%;
-    width: 100%;
-    background-color: transparent;
+body,
+html {
+  height: 100%;
+  width: 100%;
+  background-color: transparent;
 }
 
 .menubar {
-    position: fixed;
-    z-index: 10;
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 50px;
-    -webkit-app-region: drag;
+  position: fixed;
+  z-index: 10;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 50px;
+  -webkit-app-region: drag;
 }
 
 .container {
-    width: 100%;
-    height: 100%;
-    border-radius: 10px;
-    background-color: #e7e7e7;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background-color: #e7e7e7;
+  overflow: hidden;
 }
 
 .content {
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
 }
 
 .backupText {
-    position: absolute;
-    z-index: 0;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    font-size: 14px;
-    font-weight: 500;
-    color: #b9b9b9;
-    text-align: center;
-    user-select: none;
+  position: absolute;
+  z-index: 0;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  font-size: 14px;
+  font-weight: 500;
+  color: #b9b9b9;
+  text-align: center;
+  user-select: none;
 }
 
 img {
-    position: relative;
-    z-index: 1;
-    user-select: none;
-    width: 100%;
+  position: relative;
+  z-index: 1;
+  user-select: none;
+  width: 100%;
 }
 
 .smallImg {
-    width: auto !important;
-    height: auto !important;
+  width: auto !important;
+  height: auto !important;
 }
 
 .modal {
-    position: absolute;
-    z-index: 10;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    max-width: 320px;
-    max-height: 420px;
-    width: 100%;
-    height: 100%;
-    overflow-y: scroll;
-    background-color: #f0f0f0;
-    border-radius: 10px;
-    padding: 1em;
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+  background-color: #f0f0f0;
+  border-radius: 10px;
+  padding: 1em;
+  box-sizing: border-box;
 }
 
 .modal::-webkit-scrollbar {
-    width: 0px;
+  width: 0px;
 }
 
 .logo {
-    width: 40px;
-    margin-bottom: 32px;
+  width: 40px;
+  margin-bottom: 32px;
 }
 
 .label {
-    display: block;
-    font-weight: lighter;
-    color: #6d6c6c;
-    margin-bottom: 4px;
+  display: block;
+  font-weight: lighter;
+  color: #6d6c6c;
+  margin-bottom: 4px;
 }
 
 .version {
-    font-weight: bold;
-    color: #242424;
+  font-weight: bold;
+  color: #242424;
 }
 
 .heading {
-    font-size: 24px;
-    color: #1a1a1a;
-    margin-bottom: 8px;
+  font-size: 24px;
+  color: #1a1a1a;
+  margin-bottom: 8px;
 }
 
 .text {
-    font-size: 14px;
-    color: #2b2b2b;
-    line-height: 1.6em;
-    margin-bottom: 24px;
+  font-size: 14px;
+  color: #2b2b2b;
+  line-height: 1.6em;
+  margin-bottom: 24px;
 }
 
 .copyright {
-    position: absolute;
-    bottom: 0px;
-    left: 0px;
-    font-size: 12px;
-    color: #616161;
-    line-height: 1.4em;
-    padding: 1em;
+  position: absolute;
+  bottom: 0px;
+  left: 0px;
+  font-size: 12px;
+  color: #616161;
+  line-height: 1.4em;
+  padding: 1em;
 }
 
 .table {
-    text-align: left;
-    padding: 1em;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    width: 100%;
+  text-align: left;
+  padding: 1em;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  width: 100%;
 }
 
-td, th {
-    box-sizing: border-box;
-    padding: 0.5rem;
-    text-align: left;
+td,
+th {
+  box-sizing: border-box;
+  padding: 0.5rem;
+  text-align: left;
 }
 
 td {
-    border-bottom: 1px solid #e7e7e7;
+  border-bottom: 1px solid #e7e7e7;
 }
 
 td:first-child {
-    border-right: 1px solid #e7e7e7;
+  border-right: 1px solid #e7e7e7;
 }
 
 th {
-    background-color: #181818;
-    color: #f0f0f0;
+  background-color: #181818;
+  color: #f0f0f0;
 }
 
 tr:last-child td {
-    border-bottom-color: transparent;
+  border-bottom-color: transparent;
 }
 
 .about {
-    display: none;
+  display: none;
 }
 
 .help {
-    display: none;
+  display: none;
 }
 
 .info {
-    display: none;
+  display: none;
 }

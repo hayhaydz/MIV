@@ -9,7 +9,12 @@ const toggleModal = (id) => {
     ipcRenderer.send('toggleModal', id);
 }
 
-const keyDown = (e) => {
+const isModalOpen = async () => {
+    const response = await ipcRenderer.invoke('isModalOpen');
+    return response;
+}
+
+const keyDown = async (e) => {
     if(e.ctrlKey && e.key.toLowerCase() === "h") {
         toggleModal("help");
     }
@@ -22,8 +27,9 @@ const keyDown = (e) => {
         toggleModal("info");
     }
 
+    // Need a loading animation. Delay for larger files is confusing.
     if(e.ctrlKey && e.key.toLowerCase() === "o") {
-        if(!isFullscreen) {
+        if(!await isModalOpen() && !isFullscreen) {
             ipcRenderer.send('chooseFile');
             ipcRenderer.on('chosenFile', (event, base64) => {
                 const src = `data:image/jpg;base64,${base64}`;
@@ -47,7 +53,7 @@ const keyDown = (e) => {
     }
 
     if(e.key.toLowerCase() === "z") {
-        if(isHighRes && !noImg) {
+        if(!await isModalOpen() && isHighRes && !noImg) {
             let currentZoomScale = zoomInstance.getTransform().scale;
             if(!zoomedIn && currentZoomScale <= 1) {
                 zoomInstance.smoothZoom(mousePosition.x, mousePosition.y, 2);
@@ -63,17 +69,21 @@ const keyDown = (e) => {
         }
     }
 
+    // why can't new file be opened whilst in fullscreen?
     if(e.key.toLowerCase() === "f") {
-        if(!noImg) {
+        if(!await isModalOpen() &&!noImg) {
+            img.style.display = "none";
             if(!isFullscreen) {
                 ipcRenderer.send('fullscreen');
                 ipcRenderer.on('fullscreen-response', () => {
                     maxScreenSize = [window.screen.width, window.screen.height];
                     calculateImgSize();
+                    document.getElementsByClassName('container')[0].style.borderRadius = "0px";
                     img.style.width = "auto";
                     if(!isHighRes) {
                         img.style.height = "auto";
                     }
+                    img.style.display = "block";
                     isFullscreen = true;
                     resetPanzoom();
                 });
@@ -82,8 +92,12 @@ const keyDown = (e) => {
                 ipcRenderer.send('disableFullscreen');
                 ipcRenderer.on('disableFullscreen-response', () => {
                     calculateImgSize();
+                    document.getElementsByClassName('container')[0].style.borderRadius = "10px";
                     img.style.width = "100%";
-                    img.style.height = "100%";
+                    if(isHighRes) {
+                        img.style.height = "100%";
+                    }
+                    img.style.display = "block";
                     isFullscreen = false;
                     resetPanzoom();
                 });
@@ -92,12 +106,12 @@ const keyDown = (e) => {
     }
 
     if(e.key.toLowerCase() === "c") {
-        if(isHighRes && !noImg || smallImg) {
+        if(!await isModalOpen() && isHighRes && !noImg || smallImg) {
             let currentZoomScale = zoomInstance.getTransform().scale;
             if(isFullscreen && !zoomedIn && currentZoomScale <= 1) {
-                zoomInstance.smoothMoveTo(maxScreenSize[0] / 2 - newImageSize[0] / 2, maxScreenSize[1] / 2 - newImageSize[1] / 2);
+                zoomInstance.smoothMoveTo(maxScreenSize[0] / 2 - img.width / 2, maxScreenSize[1] / 2 - img.height / 2);
             } else if (smallImg) {
-                zoomInstance.smoothMoveTo(400 / 2 - newImageSize[0] / 2, 500 / 2 - newImageSize[1] / 2);
+                zoomInstance.smoothMoveTo(400 / 2 - img.width / 2, 500 / 2 - img.height / 2);
             }
         }
     }

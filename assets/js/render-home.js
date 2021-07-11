@@ -30,19 +30,25 @@ const resetPanzoom = () => {
     if(isFullscreen) {
         if(!isHighRes) {
             zoomSettings.maxZoom = 1;
+        } else {
+            zoomSettings.maxZoom = 6;
         }
         zoomInstance = panzoom(img, zoomSettings);
-        zoomInstance.moveTo(maxScreenSize[0] / 2 - newImageSize[0] / 2, maxScreenSize[1] / 2 - newImageSize[1] / 2);
+        zoomInstance.moveTo(maxScreenSize[0] / 2 - img.width / 2, maxScreenSize[1] / 2 - img.height / 2);
         zoomInstance.zoomAbs(0, 0, 1);
     } else {
         if(!isHighRes) {
             zoomSettingsBP.maxZoom = 1;
+            zoomSettings.maxZoom = 1;
+        } else {
+            zoomSettingsBP.maxZoom = 6;
+            zoomSettings.maxZoom = 6;
         }
         if(!smallImg) {
             zoomInstance = panzoom(img, zoomSettingsBP);
         } else {
             zoomInstance = panzoom(img, zoomSettings);
-            zoomInstance.moveTo(400 / 2 - newImageSize[0] / 2, 500 / 2 - newImageSize[1] / 2);
+            zoomInstance.moveTo(400 / 2 - img.width / 2, 500 / 2 - img.height / 2);
             zoomInstance.zoomAbs(0, 0, 1);
         }
     }
@@ -80,20 +86,20 @@ const calculateImgSize = () => {
 }
 
 const initialSetup = () => {
-    // zoomInstance = panzoom(img, zoomSettingsBP);
     img.setAttribute('draggable', false);
     img.style.width = "auto";
-    originalImageSize = [img.width, img.height];
+    originalImageSize = [img.naturalWidth, img.naturalHeight];
     maxScreenSize = [window.screen.width - 100, window.screen.height - 100];
-    if(originalImageSize[0] < maxScreenSize[0] || originalImageSize[1] < maxScreenSize[1]) {
-        zoomInstance.dispose();
-    } else {
+    if(originalImageSize[0] > maxScreenSize[0] || originalImageSize[1] > maxScreenSize[1]) {
         isHighRes = true;
+    } else {
+        isHighRes = false;
     }
     calculateImgSize();
     if(newImageSize[0] < 400 || newImageSize[1] < 500) {
         ipcRenderer.send('resize-window', [400, 500]);
         smallImg = true;
+        isHighRes = false;
     } else {
         ipcRenderer.send('resize-window', newImageSize);
         smallImg = false;

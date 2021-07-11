@@ -8,6 +8,10 @@ let maxSize = { width: 0, height: 0 };
 let ready = false;
 let modalOpen = false;
 let currentModal = "";
+let childWinPos = {
+    x: 0,
+    y: 0,
+};
 
 const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
@@ -47,6 +51,11 @@ const createWindow = () => {
     });
     childWin.loadFile('child.html');
     childWin.hide();
+
+    childWin.on('moved', () => {
+        childWinPos.x = childWin.getPosition()[0];
+        childWinPos.y = childWin.getPosition()[1];
+    });
     
     // win.webContents.openDevTools();
     // childWin.webContents.openDevTools();
@@ -137,16 +146,20 @@ ipcMain.on('getFileData', (event) => {
     }
 });
 
-ipcMain.on('toggleModal', (e, arg) => {
+ipcMain.on('toggleModal', (event, arg) => {
     if(arg !== currentModal) {
         currentModal = arg;
-        let mainWinPos = win.getPosition();
         childWin.show();
-        let centerPadding = {
-            x: win.getSize()[0] / 2 - 360 / 2,
-            y: win.getSize()[1] / 2 - 460 / 2,
-        };
-        childWin.setPosition(mainWinPos[0] + centerPadding.x, mainWinPos[1] + centerPadding.y);
+        if(childWinPos.x == 0) {
+            let mainWinPos = win.getPosition();
+            let centerPadding = {
+                x: Math.round(win.getSize()[0] / 2 - 360 / 2),
+                y: Math.round(win.getSize()[1] / 2 - 460 / 2),
+            };
+            childWin.setPosition(mainWinPos[0] + centerPadding.x, mainWinPos[1] + centerPadding.y);
+        } else {
+            childWin.setPosition(childWinPos.x, childWinPos.y);
+        }
         win.webContents.send('toggleModal', [arg, modalOpen]);
         childWin.webContents.send('toggleModal', [arg, modalOpen]);
         modalOpen = true;
@@ -158,4 +171,8 @@ ipcMain.on('toggleModal', (e, arg) => {
         childWin.webContents.send('toggleModal', [arg, modalOpen]);
         modalOpen = false;
     }
+});
+
+ipcMain.handle('isModalOpen', async (event) => {
+    return modalOpen;
 });

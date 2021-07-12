@@ -9,6 +9,10 @@ ipcRenderer.on('toggleModal', (e, arg) => {
     modals[arg[0]].style.display = "block";
 });
 
+ipcRenderer.on('setExifData', (e, arg) => {
+    console.log(arg);
+});
+
 window.addEventListener('DOMContentLoaded', () => {
     modals = document.getElementsByClassName('modal');
 });

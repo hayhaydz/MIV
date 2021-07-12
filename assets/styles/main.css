@@ -60,15 +60,31 @@ html {
   left: 50%;
   -webkit-transform: translate(-50%, -50%);
           transform: translate(-50%, -50%);
-  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
   font-size: 14px;
-  font-weight: 500;
+  font-weight: 600;
   color: #b9b9b9;
   text-align: center;
   -webkit-user-select: none;
      -moz-user-select: none;
       -ms-user-select: none;
           user-select: none;
+  width: 100%;
+}
+
+.loadingText {
+  position: absolute;
+  z-index: 999;
+  top: 50%;
+  left: 50%;
+  -webkit-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  font-size: 14px;
+  font-weight: 700;
+  color: #b9b9b9;
+  background-color: #f0f0f0;
+  padding: 1em 5em;
+  border-radius: 10px;
+  display: none;
 }
 
 img {

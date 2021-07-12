@@ -27,10 +27,10 @@ const keyDown = async (e) => {
         toggleModal("info");
     }
 
-    // Need a loading animation. Delay for larger files is confusing.
     if(e.ctrlKey && e.key.toLowerCase() === "o") {
         if(!await isModalOpen() && !isFullscreen) {
             ipcRenderer.send('chooseFile');
+            document.getElementById("loadingText").style.display = "block";
             ipcRenderer.on('chosenFile', (event, base64) => {
                 const src = `data:image/jpg;base64,${base64}`;
                 img.src = src;
@@ -43,6 +43,7 @@ const keyDown = async (e) => {
                         document.getElementById('backupText').style.display = "none";
                         noImg = false;
                     }
+                    document.getElementById("loadingText").style.display = "none";
                 }
             });
         }
@@ -69,7 +70,6 @@ const keyDown = async (e) => {
         }
     }
 
-    // why can't new file be opened whilst in fullscreen?
     if(e.key.toLowerCase() === "f") {
         if(!await isModalOpen() &&!noImg) {
             img.style.display = "none";
@@ -88,6 +88,27 @@ const keyDown = async (e) => {
                     resetPanzoom();
                 });
             } else {
+                maxScreenSize = [window.screen.width - 100, window.screen.height - 100];
+                ipcRenderer.send('disableFullscreen');
+                ipcRenderer.on('disableFullscreen-response', () => {
+                    calculateImgSize();
+                    document.getElementsByClassName('container')[0].style.borderRadius = "10px";
+                    img.style.width = "100%";
+                    if(isHighRes) {
+                        img.style.height = "100%";
+                    }
+                    img.style.display = "block";
+                    isFullscreen = false;
+                    resetPanzoom();
+                });
+            }
+        }
+    }
+
+    if(e.key.toLowerCase() === "escape") {
+        if(!await isModalOpen() &&!noImg) {
+            if(isFullscreen) {
+                img.style.display = "none";
                 maxScreenSize = [window.screen.width - 100, window.screen.height - 100];
                 ipcRenderer.send('disableFullscreen');
                 ipcRenderer.on('disableFullscreen-response', () => {

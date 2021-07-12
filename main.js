@@ -1,6 +1,7 @@
 const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
 const { ipcRenderer } = require("electron/renderer");
 const fs = require("fs");
+const exifParser = require("exif-parser");
 
 let win;
 let childWin;
@@ -12,6 +13,7 @@ let childWinPos = {
     x: 0,
     y: 0,
 };
+let exifData = {};
 
 const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
@@ -41,6 +43,8 @@ const createWindow = () => {
         parent: win,
         width: 360,
         height: 460,
+        maxWidth: 360,
+        maxHeight: 460,
         resizable: false,
         frame: false,
         transparent: true,
@@ -58,7 +62,7 @@ const createWindow = () => {
     });
     
     // win.webContents.openDevTools();
-    // childWin.webContents.openDevTools();
+    childWin.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
@@ -124,7 +128,11 @@ ipcMain.on('chooseFile', (event, arg) => {
     
         result.then(({canceled, filePaths, bookmarks}) => {
             if(filePaths !== undefined) {
-                const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+                const buffer = fs.readFileSync(filePaths[0]);
+                exifData = exifParser.create(buffer.slice(0, 65535)).parse();
+                childWin.webContents.send('setExifData', exifData);
+
+                const base64 = buffer.toString('base64');
                 event.reply("chosenFile", base64);
             }
         });
@@ -139,7 +147,11 @@ ipcMain.on('getFileData', (event) => {
             data = openFilePath;
 
             if(data !== ".") {
-                const base64 = fs.readFileSync(data).toString('base64');
+                const buffer = fs.readFileSync(filePaths[0]);
+                exifData = exifParser.create(buffer.slice(0, 65535)).parse();
+                // childWin.webContents.send('setExifData', 'hellooooo');
+
+                const base64 = buffer.toString('base64');
                 event.reply('getFileData-response', base64);
             }
         }

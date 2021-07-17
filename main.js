@@ -130,6 +130,7 @@ ipcMain.on('chooseFile', (event, arg) => {
             if(filePaths !== undefined) {
                 const buffer = fs.readFileSync(filePaths[0]);
                 exifData = exifParser.create(buffer.slice(0, 65535)).parse();
+                delete exifData.startMarker;
                 childWin.webContents.send('setExifData', exifData);
 
                 const base64 = buffer.toString('base64');

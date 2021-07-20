@@ -80,6 +80,7 @@ document.onmousemove = (event) => {
 
 const calculateImgSize = () => {
     imgData = calculateAspectRatioFit(originalImageSize[0], originalImageSize[1], maxScreenSize[0], maxScreenSize[1]);
+    console.log(maxScreenSize);
     newImageSize = [imgData.width, imgData.height];
     img.width = newImageSize[0];
     img.height = newImageSize[1];

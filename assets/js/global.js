@@ -23,10 +23,6 @@ const keyDown = async (e) => {
         toggleModal("about");
     }
 
-    if(e.ctrlKey && e.key.toLowerCase() === "k") {
-        toggleModal("info");
-    }
-
     if(e.ctrlKey && e.key.toLowerCase() === "o") {
         if(!await isModalOpen() && !isFullscreen) {
             ipcRenderer.send('chooseFile');
@@ -76,15 +72,17 @@ const keyDown = async (e) => {
             if(!isFullscreen) {
                 ipcRenderer.send('fullscreen');
                 ipcRenderer.on('fullscreen-response', () => {
-                    maxScreenSize = [window.screen.width, window.screen.height];
+                    maxScreenSize = [window.screen.width - 200, window.screen.height - 200];
                     calculateImgSize();
                     document.getElementsByClassName('container')[0].style.borderRadius = "0px";
                     img.style.width = "auto";
+                    img.style.height = null;
                     if(!isHighRes) {
                         img.style.height = "auto";
                     }
                     img.style.display = "block";
                     isFullscreen = true;
+                    maxScreenSize = [window.screen.width, window.screen.height];
                     resetPanzoom();
                 });
             } else {

@@ -13,7 +13,6 @@ let childWinPos = {
     x: 0,
     y: 0,
 };
-let exifData = {};
 
 const createWindow = () => {
     maxSize = screen.getPrimaryDisplay().workAreaSize;
@@ -62,7 +61,7 @@ const createWindow = () => {
     });
     
     // win.webContents.openDevTools();
-    childWin.webContents.openDevTools();
+    // childWin.webContents.openDevTools();
 };
 
 app.whenReady().then(() => {
@@ -128,12 +127,7 @@ ipcMain.on('chooseFile', (event, arg) => {
     
         result.then(({canceled, filePaths, bookmarks}) => {
             if(filePaths !== undefined) {
-                const buffer = fs.readFileSync(filePaths[0]);
-                exifData = exifParser.create(buffer.slice(0, 65535)).parse();
-                delete exifData.startMarker;
-                childWin.webContents.send('setExifData', exifData);
-
-                const base64 = buffer.toString('base64');
+                const base64 = fs.readFileSync(filePaths[0]).toString('base64');
                 event.reply("chosenFile", base64);
             }
         });
@@ -148,11 +142,7 @@ ipcMain.on('getFileData', (event) => {
             data = openFilePath;
 
             if(data !== ".") {
-                const buffer = fs.readFileSync(filePaths[0]);
-                exifData = exifParser.create(buffer.slice(0, 65535)).parse();
-                // childWin.webContents.send('setExifData', 'hellooooo');
-
-                const base64 = buffer.toString('base64');
+                const base64 = fs.readFileSync(filePaths[0]).toString('base64');
                 event.reply('getFileData-response', base64);
             }
         }

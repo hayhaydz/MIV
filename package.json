@@ -1,8 +1,8 @@
 {
   "name": "miv",
+  "description": "A Minimal Image Viewer for Windows, Mac and Linux platforms. Making viewing images distraction free.",
   "version": "1.0.0",
-  "description": "Minimal Image Viewer",
-  "main": "main.js",
+  "main": "app/index.js",
   "scripts": {
     "start": "electron .",
     "test": "echo \"Error: no test specified\" && exit 1",
@@ -10,22 +10,12 @@
     "dist": "electron-builder",
     "postinstall": "electron-builder install-app-deps"
   },
-  "build": {
-    "fileAssociations": {
-      "ext": [
-        "png",
-        "jpg",
-        "jpeg"
-      ],
-      "role": "viewer"
-    }
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/hayhaydz/MIV.git"
   },
   "author": "Haydon",
-  "license": "ISC",
+  "license": "GPL-3.0",
   "bugs": {
     "url": "https://github.com/hayhaydz/MIV/issues"
   },
@@ -35,7 +25,6 @@
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
-    "exif-parser": "^0.1.12",
     "panzoom": "^9.4.2"
   }
 }

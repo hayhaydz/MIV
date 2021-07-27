@@ -79,8 +79,11 @@ document.onmousemove = (event) => {
 }
 
 const calculateImgSize = () => {
+    if(maxScreenSize[0] > 1920 || maxScreenSize[1] > 1080) {
+        maxScreenSize[0] = 1920;
+        maxScreenSize[1] = 1080;
+    }
     imgData = calculateAspectRatioFit(originalImageSize[0], originalImageSize[1], maxScreenSize[0], maxScreenSize[1]);
-    console.log(maxScreenSize);
     newImageSize = [imgData.width, imgData.height];
     img.width = newImageSize[0];
     img.height = newImageSize[1];
@@ -115,6 +118,7 @@ const initialSetup = () => {
             img.style.width = "100%";
             img.classList.remove("smallImg");
         }
+        document.body.display = 'block';
     });
 }
 

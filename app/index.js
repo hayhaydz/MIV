@@ -1,7 +1,5 @@
 const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
-const { ipcRenderer } = require("electron/renderer");
 const fs = require("fs");
-const exifParser = require("exif-parser");
 
 let win;
 let childWin;
@@ -9,6 +7,10 @@ let maxSize = { width: 0, height: 0 };
 let ready = false;
 let modalOpen = false;
 let currentModal = "";
+let winPos = {
+    x: 100,
+    y: 100,
+}
 let childWinPos = {
     x: 0,
     y: 0,
@@ -35,7 +37,7 @@ const createWindow = () => {
         }
     });
 
-    win.loadFile('index.html');
+    win.loadFile('app/render/html/index.html');
     win.focus();
 
     childWin = new BrowserWindow({
@@ -52,13 +54,18 @@ const createWindow = () => {
             contextIsolation: false,
         }
     });
-    childWin.loadFile('child.html');
+    childWin.loadFile('app/render/html/child.html');
     childWin.hide();
 
     childWin.on('moved', () => {
         childWinPos.x = childWin.getPosition()[0];
         childWinPos.y = childWin.getPosition()[1];
     });
+
+    win.on('moved', () => {
+        winPos.x = win.getPosition()[0];
+        winPos.y = win.getPosition()[1];
+    })
     
     // win.webContents.openDevTools();
     // childWin.webContents.openDevTools();
@@ -87,7 +94,7 @@ ipcMain.on('resize-window', (event, arg) => {
         win.setResizable(true);
         win.setSize(size[0], size[1]);
         win.setResizable(false);
-        win.setPosition(50, 50);
+        win.setPosition(winPos.x, winPos.y);
         event.reply('resize-window-response', 'resize complete');
     }
 });

@@ -28,6 +28,8 @@ const keyDown = async (e) => {
             ipcRenderer.send('chooseFile');
             document.getElementById("loadingText").style.display = "block";
             ipcRenderer.on('chosenFile', (event, base64) => {
+                document.body.backgroundColor = 'transparent';
+                document.body.display = 'none';
                 const src = `data:image/jpg;base64,${base64}`;
                 img.src = src;
                 img.onload = () => {

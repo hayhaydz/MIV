@@ -4,25 +4,25 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data: https://images.unsplash.com/;">
-    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self'; img-src 'self' data: https://images.unsplash.com/;">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self';">
+    <meta http-equiv="X-Content-Security-Policy" content="default-src 'self'; script-src 'self';">
     <title>Child Window</title>
-    <link rel="stylesheet" href="assets/styles/main.css">
+    <link rel="stylesheet" href="../assets/styles/main.css">
 </head>
 <body>
     <div class="menubar"></div>
     <div class="container">
         <div class="content">
             <div class="modal about" id="about">
-                <img src="assets/img/symbol.svg" class="logo" alt="The MIV logo is two white mountain peaks with and white circle as a sun behind them. All contained within a circle shape.">
+                <img src="../assets/img/symbol.svg" class="logo" alt="The MIV logo is two white mountain peaks with and white circle as a sun behind them. All contained within a circle shape.">
                 <h1 class="heading">About</h1>
-                <p class="text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Nostrum fuga, eligendi cupiditate, autem nemo, repudiandae provident suscipit temporibus cum ipsa impedit adipisci repellat earum. Officiis assumenda dolorem amet totam quam.</p>
+                <p class="text">Removing the distractions from viewing images. Creating a space free from boundaries and sharp edges, tailored to the pleasure of looking at an image and only the image. Swapping buttons for shortcuts. The only thing that can be seen is the only thing that is important, the image.</p>
                 <span class="label">Version</span>
                 <p class="version">1.0.0</p>
                 <p class="copyright">Copyright 2021 © MIV (Minimal Image Viewer). All rights reserved.</p>
             </div>
             <div class="modal help" id="help">
-                <img src="assets/img/symbol.svg" class="logo" alt="The MIV logo is two white mountain peaks with and white circle as a sun behind them. All contained within a circle shape.">
+                <img src="../assets/img/symbol.svg" class="logo" alt="The MIV logo is two white mountain peaks with and white circle as a sun behind them. All contained within a circle shape.">
                 <h1 class="heading">Help</h1>
                 <table class="table">
                     <tr>
@@ -50,10 +50,6 @@
                         <td>F</td>
                     </tr>
                     <tr>
-                        <td>Exit Fullscreen</td>
-                        <td>ESC</td>
-                    </tr>
-                    <tr>
                         <td>Center Image when in Fullscreen</td>
                         <td>C</td>
                     </tr>
@@ -61,15 +57,11 @@
                         <td>Zoom In / Out</td>
                         <td>Z</td>
                     </tr>
-                    <tr>
-                        <td>Zoom In</td>
-                        <td>Double Click</td>
-                    </tr>
                 </table>
             </div>
         </div>
       </div>
-      <script src="assets/js/render-child.js"></script>
-      <script src="assets/js/global.js"></script>
+      <script src="../assets/js/render-child.js"></script>
+      <script src="../assets/js/global.js"></script>
 </body>
 </html>

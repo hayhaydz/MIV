@@ -1,6 +1,6 @@
 {
     "appId": "com.temopus.miv",
-    "productName": "Minimal-Image-Viewer",
+    "productName": "Minimal Image Viewer",
     "copyright": "MINIMAL IMAGE VIEWER",
     "directories": {
         "app": ".",

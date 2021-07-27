@@ -149,7 +149,7 @@ ipcMain.on('getFileData', (event) => {
             data = openFilePath;
 
             if(data !== ".") {
-                const base64 = fs.readFileSync(filePaths[0]).toString('base64');
+                const base64 = fs.readFileSync(data).toString('base64');
                 event.reply('getFileData-response', base64);
             }
         }

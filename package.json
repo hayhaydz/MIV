@@ -8,11 +8,12 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "pack": "electron-builder --dir",
     "dist": "electron-builder",
-    "postinstall": "electron-builder install-app-deps"
+    "postinstall": "electron-builder install-app-deps",
+    "publish": "electron-builder -w -p always"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/hayhaydz/MIV.git"
+    "url": "https://github.com/hayhaydz/MIV.git"
   },
   "author": "Haydon",
   "license": "GPL-3.0",
@@ -25,6 +26,7 @@
     "electron-builder": "^22.11.7"
   },
   "dependencies": {
-    "panzoom": "^9.4.2"
+    "panzoom": "^9.4.2",
+    "v8-compile-cache": "^2.3.0"
   }
 }

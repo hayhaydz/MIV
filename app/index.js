@@ -1,5 +1,6 @@
 const { app, BrowserWindow, screen, ipcMain, dialog } = require("electron");
 const fs = require("fs");
+require('v8-compile-cache');
 
 let win;
 let childWin;

@@ -1,7 +1,15 @@
 {
     "appId": "com.temopus.miv",
+    "artifactName": "minimal-image-viewer-${version}.${ext}",
     "productName": "Minimal Image Viewer",
-    "copyright": "MINIMAL IMAGE VIEWER",
+    "copyright": "MINIMAL IMAGE VIEWER COPYRIGHT © 2021",
+    "compression": "maximum",
+    "publish": [
+        {
+            "provider": "github",
+            "owner": "hayhaydz"
+        }
+    ],
     "directories": {
         "app": ".",
         "output": "out",
@@ -37,7 +45,7 @@
         "category": "public.app-category.utilities"
         },
     "win": {
-        "target": "nsis"
+        "target": ["nsis", "zip"]
     },
     "linux": {
         "target": "AppImage",

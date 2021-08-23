@@ -33,7 +33,7 @@ Minimal Image Viewer has been built in Electron. Currently the ```main``` branch
 How to run locally
 
 1. Clone the repository
-```git clone https://github.com/lostdesign/linked.git```
+```git clone https://github.com/hayhaydz/MIV.git```
 2. Install project dependencies
 ```yarn```
 3. Start the application

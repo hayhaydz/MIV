@@ -37,7 +37,7 @@ Designed to create a space free from boundaries and sharp edges, tailored to the
 
 ## Development
 Minimal Image Viewer has been built in Electron. Currently the ```main``` branch can be used for forking and working on. All necessary code can be found in the ```App``` folder.
-Please check [Contributing.md](/CONTRIBUTING.md) first before opening a pull request please.
+Please check [Contributing.md](/CONTRIBUTING.md) first before opening a pull request.
 
 How to run locally
 

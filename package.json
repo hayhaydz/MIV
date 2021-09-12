@@ -1,7 +1,7 @@
 {
   "name": "miv",
   "description": "A Minimal Image Viewer for Windows, Mac and Linux platforms. Making viewing images distraction free.",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "app/index.js",
   "scripts": {
     "start": "electron .",

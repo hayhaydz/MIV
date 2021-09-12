@@ -15,15 +15,15 @@ const isModalOpen = async () => {
 }
 
 const keyDown = async (e) => {
-    if(e.ctrlKey || e.metaKey && e.key.toLowerCase() === "h") {
+    if(e.ctrlKey && e.key.toLowerCase() === "h" || e.metaKey && e.key.toLowerCase() === "h") {
         toggleModal("help");
     }
 
-    if(e.ctrlKey && e.key.toLowerCase() === "j") {
+    if(e.ctrlKey && e.key.toLowerCase() === "j" || e.metaKey && e.key.toLowerCase() === "j") {
         toggleModal("about");
     }
 
-    if(e.ctrlKey && e.key.toLowerCase() === "o") {
+    if(e.ctrlKey && e.key.toLowerCase() === "o" || e.metaKey && e.key.toLowerCase() === "o") {
         if(!await isModalOpen() && !isFullscreen) {
             ipcRenderer.send('chooseFile');
             document.getElementById("loadingText").style.display = "block";
@@ -47,7 +47,7 @@ const keyDown = async (e) => {
         }
     }
 
-    if(e.ctrlKey && e.key.toLowerCase() === "x") {
+    if(e.ctrlKey && e.key.toLowerCase() === "x" || e.metaKey && e.key.toLowerCase() === "x") {
         ipcRenderer.send('close');
     }
 

@@ -33,7 +33,7 @@
     },
     "dmg": {
         "background": null,
-        "backgroundColor": "#f9f9f9f9",
+        "backgroundColor": "#f9f9f9",
         "window": {
             "width": "400",
             "height": "300"

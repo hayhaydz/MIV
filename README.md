@@ -6,6 +6,8 @@ The image in front of you.
 
 Designed to create a space free from boundaries and sharp edges, tailored to the pleasure of looking at an image and only the image. Swapping buttons for shortcuts. The only thing that can be seen is the only thing that is important, the image.
 
+[<img src="Assets/download.png?raw=true" width="200">](https://github.com/hayhaydz/MIV/releases/download/v1.0.0/Minimal-Image-Viewer-1.0.0.exe)
+
 ## Minimal Features
 - Zooming In
 - Panning

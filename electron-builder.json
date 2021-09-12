@@ -20,6 +20,17 @@
         "app/**/*",
         "node_modules"
     ],
+    "mac": {
+        "target": "dmg",
+        "category": "public.app-category.photography"
+    },
+    "win": {
+        "target": ["nsis", "zip"]
+    },
+    "linux": {
+        "target": ["AppImage", "deb"],
+        "category": "Utility"
+    },
     "dmg": {
         "background": null,
         "backgroundColor": "#f9f9f9f9",
@@ -40,23 +51,21 @@
             }
         ]
     },
-    "mac": {
-        "target": "dmg",
-        "category": "public.app-category.utilities"
+    "fileAssociations": [
+        {
+            "ext": "png",
+            "name": "PNG",
+            "role": "Viewer"
         },
-    "win": {
-        "target": ["nsis", "zip"]
-    },
-    "linux": {
-        "target": "AppImage",
-        "category": "Utility"
-    },
-    "fileAssociations": {
-        "ext": [
-        "png",
-        "jpg",
-        "jpeg"
-        ],
-        "role": "viewer"
-    }
+        {
+            "ext": "jpg",
+            "name": "JPG",
+            "role": "Viewer"
+        },
+        {
+            "ext": "jpeg",
+            "name": "JPEG",
+            "role": "Viewer"
+        }
+    ]
 }

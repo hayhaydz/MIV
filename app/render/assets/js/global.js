@@ -15,7 +15,7 @@ const isModalOpen = async () => {
 }
 
 const keyDown = async (e) => {
-    if(e.ctrlKey && e.key.toLowerCase() === "h") {
+    if(e.ctrlKey || e.metaKey && e.key.toLowerCase() === "h") {
         toggleModal("help");
     }
 
